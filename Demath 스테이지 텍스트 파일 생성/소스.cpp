@@ -11,7 +11,7 @@
 #define TIME_MAX 10
 #define POINT 0
 using namespace std;
-float calculate(vector<float> a, vector<string> b, int n);
+float Calculate(vector<float> a, vector<string> b, int n);
 float PointSet(float*);
 int main()
 {
@@ -62,7 +62,7 @@ int main()
 				for (int j = 0; j < m - 1; j++)
 					random_operat[j] = operat[operat_index(gen)];
 
-				sum = calculate(random_number, random_operat, m);
+				sum = Calculate(random_number, random_operat, m);
 			}
 			if (sum > result)
 				inMax = true;
@@ -79,7 +79,7 @@ int main()
 					}
 					for (int j = 0; j < m - 1; j++)
 						random_operat[j] = operat[operat_index(gen)];
-					newSum = calculate(random_number, random_operat, m);
+					newSum = Calculate(random_number, random_operat, m);
 				}
 				sum = newSum;
 			}
@@ -96,7 +96,7 @@ int main()
 	return 0;
 }
 
-float calculate(vector<float> a, vector<string> b, int n)
+float Calculate(vector<float> a, vector<string> b, int n)
 {
 	queue<string> s;
 	s.push(to_string(a[0]));
