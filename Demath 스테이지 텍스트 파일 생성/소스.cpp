@@ -5,14 +5,19 @@
 #include <queue>
 #include <string>
 #define N 5
-#define A 50
+#define A 10
+#define MAX 100
 #define TIME_MIN 2
 #define TIME_MAX 10
+#define POINT 0
 using namespace std;
 float calculate(vector<float> a, vector<string> b, int n);
-
+float PointSet(float*);
 int main()
 {
+	ios_base::sync_with_stdio(false);
+	cout.tie(NULL);
+
 	random_device rd;
 	mt19937 gen(rd());
 
@@ -32,53 +37,65 @@ int main()
 	uniform_real_distribution<float> result_dir(0, maximum);
 	uniform_int_distribution<int> operat_index(0, k - 1);
 
+	cout << fixed;
+	cout.precision(POINT); // 소수점 출력 형식
+
 	for (int i = 0; i < n; i++) // 출력
 	{
 		bool inMax = false;
 		float result = result_dir(gen);
+		PointSet(&result);
+
 		cout << time_dir(gen) << ' ' << result << ' ';
 
-		float offset = result;
-		if (offset < A)
-			offset = A;
-		else if (offset > A)
-			offset = maximum - A;
-
-		uniform_real_distribution<float> number_dir(offset - A, offset + A);
+		uniform_real_distribution<float> number_dir(0, MAX);
 		for (int i = 0; i < N; i++)
 		{
-			for (int j = 0; j < m; j++)
-				random_number[j] = number_dir(gen);
-			for (int j = 0; j < m - 1; j++)
-				random_operat[j] = operat[operat_index(gen)];
-
-			float sum = calculate(random_number, random_operat, m);
-			if (sum > result)
-				inMax = true;
-			while (i == N - 1 && result >= sum && !inMax) // 답보다 큰 값이 하나도 없을 때
+			float sum = MAX + A + 1;
+			while (sum - result > A)
 			{
 				for (int j = 0; j < m; j++)
+				{
 					random_number[j] = number_dir(gen);
+					PointSet(&random_number[j]);
+				}
 				for (int j = 0; j < m - 1; j++)
 					random_operat[j] = operat[operat_index(gen)];
+
 				sum = calculate(random_number, random_operat, m);
 			}
+			if (sum > result)
+				inMax = true;
+
+			while (i == N - 1 && result >= sum && !inMax) // 답보다 큰 값이 하나도 없을 때
+			{
+				float newSum = MAX + A + 1;
+				while (newSum - result > A)
+				{
+					for (int j = 0; j < m; j++)
+					{
+						random_number[j] = number_dir(gen);
+						PointSet(&random_number[j]);
+					}
+					for (int j = 0; j < m - 1; j++)
+						random_operat[j] = operat[operat_index(gen)];
+					newSum = calculate(random_number, random_operat, m);
+				}
+				sum = newSum;
+			}
 			arr[i] = sum;
-			cout << fixed;
-			cout.precision(0); // 소수점 출력 형식
 			for (int j = 0; j < m - 1; j++)
 				cout << random_number[j] << random_operat[j];
 			cout << random_number[m - 1] << ' ';
 		}
-		cout << fixed;
-		cout.precision(0); // 소수점 출력 형식
 		for (int i = 0; i < N; i++)
 			cout << arr[i] << ' ';
-		cout << endl;
+		cout << '\n';
 	}
 
 	return 0;
 }
+
 float calculate(vector<float> a, vector<string> b, int n)
 {
 	queue<string> s;
@@ -156,4 +173,21 @@ float calculate(vector<float> a, vector<string> b, int n)
 	}
 
 	return t.top();
+}
+
+float PointSet(float *number)
+{
+	//cout << '\n' << *number << ' ';
+
+	int ten = pow(10, POINT);
+	//int temp = *number * ten;
+	//float result = (float)temp / ten;
+	//*number = result;
+
+	*number = floor(*number * ten) / ten;
+	*number += 0.000005f;
+
+	//cout << ' ' << *number << "\n\n";
+	
+	return *number;
 }
