@@ -5,7 +5,8 @@
 #include <queue>
 #include <string>
 #define N 5
-#define A 10
+#define A 15
+#define B 7
 #define MAX 100
 #define TIME_MIN 2
 #define TIME_MAX 10
@@ -13,6 +14,7 @@
 using namespace std;
 float Calculate(vector<float> a, vector<string> b, int n);
 float PointSet(float*);
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
@@ -64,13 +66,13 @@ int main()
 
 				sum = Calculate(random_number, random_operat, m);
 			}
-			if (sum > result)
+			if (sum - result >= B && sum - result <= A)
 				inMax = true;
 
 			while (i == N - 1 && result >= sum && !inMax) // 답보다 큰 값이 하나도 없을 때
 			{
 				float newSum = MAX + A + 1;
-				while (newSum - result > A)
+				while (newSum - result > A || newSum - result < B)
 				{
 					for (int j = 0; j < m; j++)
 					{
